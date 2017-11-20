@@ -2,7 +2,7 @@ package PopGenetics;
 
 import java.util.Random;
 
-public class Individual {
+public class Individual implements Comparable<Individual>{
 	protected int fitness;
 	protected boolean x_genome[];
 	protected boolean y_genome[];
@@ -20,6 +20,10 @@ public class Individual {
 		}
 	}
 
+	public Individual() {
+		this(20);
+	}
+	
 	public boolean[] get_x_genome() {
 		return this.x_genome;
 	}
@@ -83,6 +87,11 @@ public class Individual {
 		}
 		
 		return i;
+	}
+	
+	@Override
+	public int compareTo(Individual i) {
+		return this.fitness - i.fitness;
 	}
 }
 
