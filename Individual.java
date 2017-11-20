@@ -47,46 +47,52 @@ public class Individual implements Comparable<Individual>{
 	}
 	
 	public Individual singlePointCrossover(Individual i) {
+		Individual t = new Individual();
 		int index = random.nextInt(x_genome.length);
-		boolean temp = false;
 		
 		for(int j = index; j < x_genome.length; j++) {
-			this.x_genome[j] = temp;
-			this.x_genome[j] = i.x_genome[j];
-			i.x_genome[j] = temp;
+			if (j < index) {
+				t.x_genome[j] = this.x_genome[j]; 
+			} else {
+				t.x_genome[j] = i.x_genome[j];
+			}
 		}
 		
 		index = random.nextInt(y_genome.length);
 		
 		for(int j = index; j < y_genome.length; j++) {
-			this.y_genome[j] = temp;
-			this.y_genome[j] = i.y_genome[j];
-			i.y_genome[j] = temp;
+			if(j < index) {
+				t.y_genome[j] = this.y_genome[j];
+			} else {
+				t.y_genome[j] = i.y_genome[j];
+			}
 		}
 		
-		return i;
+		t.fitness = 0;
+		return t;
 	}
 	
 	public Individual uniformPointCrossover(Individual i) {
-		boolean temp = false;
+		Individual t = new Individual();
 		
 		for(int j = 0; j < x_genome.length; j++) {
 			if (random.nextBoolean()) {
-				this.x_genome[j] = temp;
-				this.x_genome[j] = i.x_genome[j];
-				i.x_genome[j] = temp;
+				t.x_genome[j] = this.x_genome[j];
+			} else {
+				t.x_genome[j] = i.x_genome[j];
 			}
 		}
 		
 		for(int j = 0; j < y_genome.length; j++) {
 			if(random.nextBoolean()) {
-				this.y_genome[j] = temp;
-				this.y_genome[j] = i.y_genome[j];
-				i.y_genome[j] = temp;
+				t.y_genome[j] = this.y_genome[j];
+			} else {
+				t.y_genome[j] = i.y_genome[j];
 			}
 		}
 		
-		return i;
+		t.fitness = 0;
+		return t;
 	}
 	
 	@Override
