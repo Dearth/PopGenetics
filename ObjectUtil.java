@@ -1,4 +1,4 @@
-package serialization_test;
+package PopGenetics;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

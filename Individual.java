@@ -28,22 +28,43 @@ public class Individual implements Comparable<Individual>{
 		return this.x_genome;
 	}
 	
+	public double get_x_coord() {
+		int sum = 0;
+		for(boolean b : x_genome) {
+		    sum += b ? 1 : 0;
+		}
+		double x_coord = (double) sum / x_genome.length;
+		return x_coord;
+	}
+	
 	public boolean[] get_y_genome() {
 		return this.y_genome;
 	}
 	
-	public void getFitness(int fit) {
+	public double get_y_coord() {
+		int sum = 0;
+		for(boolean b : y_genome) {
+		    sum += b ? 1 : 0;
+		}
+		double y_coord = (double) sum / y_genome.length;
+		return y_coord;
+	}
+	
+	public void setFitness(int fit) {
 		this.fitness = fit;
 	}
 	
-	public void mutate_x_genome() {
-		int index = random.nextInt(x_genome.length);
-		x_genome[index] = random.nextBoolean();
-	}
-	
-	public void mutate_y_genome() {
-		int index = random.nextInt(y_genome.length);
-		y_genome[index] = random.nextBoolean();
+	public void mutate(double mutation_rate)
+	{
+		// assumes that the genome length is same for x and y
+		for (int i = 0; i < x_genome.length; i++) {
+			if(random.nextDouble() < mutation_rate) {
+				x_genome[i] = random.nextBoolean();
+			}
+			if(random.nextDouble() < mutation_rate) {
+				y_genome[i] = random.nextBoolean()
+			}
+		}
 	}
 	
 	public Individual singlePointCrossover(Individual i) {

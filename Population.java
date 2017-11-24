@@ -41,12 +41,7 @@ public class Population implements Serializable{
 	
 	public void mutatePopulation() {
 		for (int i = 0; i < this.population.length; i++) {
-			if(random.nextDouble() < this.mutation_rate) {
-				if(random.nextBoolean()) {
-					this.population[i].mutate_x_genome();
-				} else {
-					this.population[i].mutate_y_genome();
-				}
+			this.population[i].mutate(this.mutation_rate);
 			}
 		}
 	}

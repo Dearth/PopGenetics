@@ -1,4 +1,4 @@
-package Hw4;
+package PopGenetics;
 
 import GenCol.*;
 

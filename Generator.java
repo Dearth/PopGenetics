@@ -1,12 +1,4 @@
-/**
- * DEVS-Suite Simulator
- * Arizona Center for Integrative Modeling & Simulation
- * Arizona State University, Tempe, AZ, USA
- *
- * Author(s): H.S. Sarjoughian & C. Zhang
- */
-
-package Hw4;
+package PopGenetics;
 
 import GenCol.*;
 
