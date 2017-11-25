@@ -14,10 +14,20 @@ public class Individual implements Serializable, Comparable<Individual>{
 		x_genome = new boolean[size];
 		y_genome = new boolean[size];
 		random = new Random();
+		int x_limit = random.nextInt() % size;
+		int y_limit = random.nextInt() % size;
 		
+		// set a uniform random # of true per array
 		for (int i = 0; i < size; i++) {
-			x_genome[i] = random.nextBoolean();
-			y_genome[i] = random.nextBoolean();
+			if(i < x_limit)
+				x_genome[i] = true;
+			else
+				x_genome[i] = false;
+			
+			if(i < y_limit)		
+				y_genome[i] = true;
+			else
+				y_genome[i] = false;
 		}
 	}
 
