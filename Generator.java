@@ -1,9 +1,7 @@
 package PopGenetics;
 
 import GenCol.*;
-
 import model.modeling.*;
-
 import view.modeling.ViewableAtomic;
 
 public class Generator extends ViewableAtomic {
@@ -46,7 +44,6 @@ public class Generator extends ViewableAtomic {
 				holdIn("active", 1);
 			else if (count == 1)
 				holdIn("active", 1);
-			
 			//stops scheduling of outputs
 			else
 				passivate();

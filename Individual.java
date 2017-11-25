@@ -1,8 +1,9 @@
 package PopGenetics;
 
 import java.util.Random;
+import java.io.Serializable;
 
-public class Individual implements Comparable<Individual>{
+public class Individual implements Serializable, Comparable<Individual>{
 	protected double fitness;
 	protected boolean x_genome[];
 	protected boolean y_genome[];

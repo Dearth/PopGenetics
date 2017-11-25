@@ -10,10 +10,15 @@ public class Population implements Serializable{
 	protected double selection_strength;
 	protected Individual population[];
 	protected Random random;
+	static final long serialVersionUID = 0;
 	
 	public Population(int pop_size, double mut_rate, double s_str) {
 		generation = 0;
 		population = new Individual[pop_size];
+		for (int i = 0; i < pop_size; i++)
+		{
+			population[i] = new Individual();
+		}
 		random = new Random();
 		mutation_rate = mut_rate;
 		selection_strength = s_str;

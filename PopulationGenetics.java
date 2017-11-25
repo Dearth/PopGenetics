@@ -14,7 +14,7 @@ public class PopulationGenetics extends ViewableDigraph {
 		super("RMSD");
 
 		ViewableAtomic Fitness = new Fitness("Fitness");
-		ViewableAtomic Generator = new Generator("Generator", 0); // first arg is delta_theta
+		ViewableAtomic Generator = new Generator("Generator", 0); // first argument is delta_theta
 
 		add(Fitness);
 		add(Generator);
