@@ -17,6 +17,7 @@ public class Transducer extends ViewableAtomic {
 	
 	Population pop;
 	Population storage[];
+	int generation_limit;
 	int generation = 0;
 	
 	public Transducer() {
@@ -26,8 +27,10 @@ public class Transducer extends ViewableAtomic {
 	public Transducer(String name, int generations) {
 		super(name);
 		storage = new Population[generations];
+		this.generation_limit = generations;
 		addInport("in_population");
 		addOutport("out_population");
+		addOutport("stop");
 	}
 	
 	public void initialize() {
@@ -47,17 +50,20 @@ public class Transducer extends ViewableAtomic {
 			storage[generation] = pop;
 			generation += 1;
 			holdIn("active", 0);
-		}
-		
-		// write data structure to file
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-		//Object to JSON in file
-		try {
-			mapper.writeValue(new File("/home/joe/Downloads/storage.json"), storage);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			
+			if (generation == generation_limit)
+			{
+				// write data structure to file
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+				//Object to JSON in file
+				try {
+					mapper.writeValue(new File("/home/joe/Downloads/storage.json"), storage);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -75,7 +81,13 @@ public class Transducer extends ViewableAtomic {
 		content con;		
 		String serialized = "";
 		serialized = ObjectUtil.serializeObjectToString(pop);
-		con = makeContent("out_population", new entity(serialized));
+		if(generation == generation_limit)
+		{
+			// make a stop message
+			con = makeContent("stop", new entity("True"));
+		}
+		else
+			con = makeContent("out_population", new entity(serialized));
 		m.add(con);
 		return m;
 	}

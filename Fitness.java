@@ -19,6 +19,7 @@ public class Fitness extends ViewableAtomic {
 		super(name);
 		addInport("in_population");
 		addInport("delta_theta");
+		addInport("stop");
 		addOutport("out_population");
 	}
 	
@@ -55,13 +56,23 @@ public class Fitness extends ViewableAtomic {
 		if (messageOnPort(x, "delta_theta", 0)) {
 			delta_theta = Float.parseFloat(x.getValOnPort("delta_theta", 0).toString());
 		}
+		
+		if (messageOnPort(x, "stop", 0)) {
+			phase = "stop";
+		}
 			
 		if (messageOnPort(x, "in_population", 0)) {
 			String temp = x.getValOnPort("in_population", 0).toString();
 			Object returned = ObjectUtil.deserializeObjectFromString(temp);
 			pop = (Population) returned;
 			evaluate_fitness();
-			holdIn("active", 0);
+			
+			// if the phase is set to stop, then cease the loop and set to passive.
+			// else, trigger output
+			if(phaseIs("stop"))
+				passivate();
+			else
+				holdIn("active", 0);
 		}
 			
 	}

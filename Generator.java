@@ -10,16 +10,26 @@ public class Generator extends ViewableAtomic {
 	protected int count;
 	protected Population p = new Population();
 	protected double delta_theta;
+	protected double p_crossover;
+	protected double selective_pressure;
+	protected double p_mutate;
+	
 
 	public Generator() { // default constructor
-		this("Generator", 0);
+		this("Generator", 0, 0.1, 1, 0.0);
 	}
 
-	public Generator(String name, double delta_theta) {
+	public Generator(String name, double delta_theta, double p_crossover, double selective_pressure, double p_mutate) {
 		super(name);
 		this.delta_theta = delta_theta;
+		this.p_crossover = p_crossover;
+		this.selective_pressure = selective_pressure;
+		this.p_mutate = p_mutate;
 		addOutport("out_population");
 		addOutport("delta_theta");
+		addOutport("p_crossover");
+		addOutport("selective_pressure");
+		addOutport("p_mutate");
 	}
 
 	public void initialize() {
@@ -38,10 +48,8 @@ public class Generator extends ViewableAtomic {
 
 		if (phaseIs("active")) {
 
-			if (count == 0)
+			if (count < 5)
 				holdIn("active", 1);
-//			else if (count == 1)
-//				holdIn("active", 1);
 			//stops scheduling of outputs
 			else
 				passivate();
@@ -60,7 +68,13 @@ public class Generator extends ViewableAtomic {
 		
 		if (count == 0)
 			con = makeContent("delta_theta", new entity(String.valueOf(delta_theta)));
-		else
+		else if (count == 1)
+			con = makeContent("p_crossover", new entity(String.valueOf(p_crossover)));
+		else if (count == 2)
+			con = makeContent("selective_pressure", new entity(String.valueOf(selective_pressure)));
+		else if (count == 3)
+			con = makeContent("p_mutate", new entity(String.valueOf(p_mutate)));
+		else // if (count == 4)
 			con = makeContent("out_population", new entity(ObjectUtil.serializeObjectToString(p)));
 
 		m.add(con);
