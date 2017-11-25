@@ -60,21 +60,20 @@ public class Fitness extends ViewableAtomic {
 		if (messageOnPort(x, "stop", 0)) {
 			phase = "stop";
 		}
-			
-		if (messageOnPort(x, "in_population", 0)) {
-			String temp = x.getValOnPort("in_population", 0).toString();
-			Object returned = ObjectUtil.deserializeObjectFromString(temp);
-			pop = (Population) returned;
-			evaluate_fitness();
-			
-			// if the phase is set to stop, then cease the loop and set to passive.
-			// else, trigger output
-			if(phaseIs("stop"))
-				passivate();
-			else
+		
+		if (!phaseIs("stop"))
+		{
+			if (messageOnPort(x, "in_population", 0)) {
+				String temp = x.getValOnPort("in_population", 0).toString();
+				Object returned = ObjectUtil.deserializeObjectFromString(temp);
+				pop = (Population) returned;
+				evaluate_fitness();
+				
+				// if the phase is set to stop, then cease the loop and set to passive.
+				// else, trigger output
 				holdIn("active", 0);
-		}
-			
+			}
+		}	
 	}
 	
 	public void deltint() {
@@ -88,7 +87,7 @@ public class Fitness extends ViewableAtomic {
 	
 	public message out() {
 		message m = new message();
-		content con;		
+		content con;
 		String serialized = "";
 		serialized = ObjectUtil.serializeObjectToString(pop);
 		con = makeContent("out_population", new entity(serialized));
