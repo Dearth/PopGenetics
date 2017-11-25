@@ -14,19 +14,19 @@ public class PopulationGenetics extends ViewableDigraph {
 		super("PopGenetics");
 
 		ViewableAtomic Fitness = new Fitness("Fitness");
-		ViewableAtomic Generator = new Generator("Generator", 0); // first argument is delta_theta
+		ViewableAtomic Generator = new Generator("Generator", 0); // second argument is delta_theta
+		ViewableAtomic Transducer = new Transducer("Transducer", 1000); // second argument is # of generations
 
 		add(Fitness);
 		add(Generator);
+		add(Transducer);
 
 		addOutport("out_population");
-//		addOutport("outRed");
 
 		addCoupling(Generator, "out_population", Fitness, "in_population");
 		addCoupling(Generator, "delta_theta", Fitness, "delta_theta");
-//		addCoupling(Requester, "outRed", MSD, "inRed");
-
-//		addCoupling(MSD, "outGreen", this, "outGreen");
+		addCoupling(Fitness, "out_population", Transducer, "in_population");
+		
 		addCoupling(Fitness, "out_population", this, "out_population");
 	}
 

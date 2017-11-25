@@ -9,14 +9,13 @@ import view.modeling.ViewableAtomic;
 public class Crossover extends ViewableAtomic {
 	
 	public Crossover() {
-		this("MSD");
+		this("Crossover");
 	}
 	
 	public Crossover(String name) {
 		super(name);
-		addInport("inGreen");
-		addInport("inRed");
-		addOutport("outGreen");
+		addInport("p_crossover");
+		addInport("");
 		addOutport("outRed");
 		addTestInput("inGreen",new entity("True"));
 		addTestInput("inRed",new entity("True"));

@@ -8,7 +8,7 @@ public class Generator extends ViewableAtomic {
 
 	// variable for sequencing order of internal transition states and thus outputs
 	protected int count;
-	protected Population p;
+	protected Population p = new Population();
 	protected double delta_theta;
 
 	public Generator() { // default constructor
@@ -27,7 +27,6 @@ public class Generator extends ViewableAtomic {
 
 		//initial value 
 		count = 0;
-		p = new Population();
 		super.initialize();
 	}
 
@@ -42,8 +41,8 @@ public class Generator extends ViewableAtomic {
 
 			if (count == 0)
 				holdIn("active", 1);
-			else if (count == 1)
-				holdIn("active", 1);
+//			else if (count == 1)
+//				holdIn("active", 1);
 			//stops scheduling of outputs
 			else
 				passivate();
@@ -58,11 +57,11 @@ public class Generator extends ViewableAtomic {
 		message m = new message();
 		
 		//default content is needed  
-		content con = makeContent("out_population", new entity("none"));
+		content con; // = makeContent("out_population", new entity("none"));
 		
 		if (count == 0)
 			con = makeContent("delta_theta", new entity(String.valueOf(delta_theta)));
-		else if (count == 1)
+		else
 			con = makeContent("out_population", new entity(ObjectUtil.serializeObjectToString(p)));
 
 		m.add(con);
