@@ -4,21 +4,19 @@ import GenCol.*;
 import model.modeling.*;
 import view.modeling.ViewableAtomic;
 
-public class Fitness extends ViewableAtomic {
+public class Mutator extends ViewableAtomic {
 	
-	double theta = 0;
-	double delta_theta = 0;
-	double radius = 0.5;
+	double p_mutate;
 	Population pop;
 	
-	public Fitness() {
-		this("Fitness");
+	public Mutator() {
+		this("Mutator", 0.0);
 	}
 	
-	public Fitness(String name) {
+	public Mutator(String name, double p_mutate) {
 		super(name);
 		addInport("in_population");
-		addInport("delta_theta");
+		addInport("p_mutate");
 		addOutport("out_population");
 	}
 	
@@ -27,40 +25,23 @@ public class Fitness extends ViewableAtomic {
 		super.initialize();
 	}
 	
-	public double fitness(double x, double y, double r, double theta) {
-		double ret, x_part, y_part, pow;
-		x_part = Math.pow((x - r*Math.cos(theta) - 0.5), 2) / 2;
-		y_part = Math.pow((y - r*Math.cos(theta) - 0.5), 2) / 2;
-		pow = (-1.0) * (x_part + y_part);
-		ret = Math.pow(Math.E, pow);
-		return ret;
-	}
-	
-	public void evaluate_fitness() {
-		double x, y;	
-		for (Individual i : pop.population) {
-			x = i.get_x_coord();
-			y = i.get_y_coord();
-			i.setFitness(this.fitness(x, y, radius, theta));
-		}
-		
-		theta += delta_theta; // rotate fitness function in advance of next call
-	}
-	
 	public void deltext(double e, message x) {
 		Continue(e);
 
 		// if the message is on the delta_theta port, set delta_theta;
 		// else take in a population, iterate over individuals, extract x and y, evaluate fitness, and update population
-		if (messageOnPort(x, "delta_theta", 0)) {
-			delta_theta = Float.parseFloat(x.getValOnPort("delta_theta", 0).toString());
+		if (messageOnPort(x, "p_mutate", 0)) {
+			p_mutate = Float.parseFloat(x.getValOnPort("p_mutate", 0).toString());
 		}
 			
 		if (messageOnPort(x, "in_population", 0)) {
 			String temp = x.getValOnPort("in_population", 0).toString();
 			Object returned = ObjectUtil.deserializeObjectFromString(temp);
 			pop = (Population) returned;
-			evaluate_fitness();
+			
+			pop.mutation_rate = p_mutate;
+			pop.mutatePopulation();
+			
 			holdIn("active", 0);
 		}
 			

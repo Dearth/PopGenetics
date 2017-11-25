@@ -32,8 +32,8 @@ public class Population implements Serializable{
 		Arrays.sort(this.population);
 	}
 	
-	public void setGeneration(int g) {
-		this.generation = g;
+	public void incrementGeneration() {
+		this.generation += 1;
 	}
 	
 	public void setMutationRate(double r) {

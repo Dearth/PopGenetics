@@ -16,16 +16,23 @@ public class PopulationGenetics extends ViewableDigraph {
 		ViewableAtomic Fitness = new Fitness("Fitness");
 		ViewableAtomic Generator = new Generator("Generator", 0); // second argument is delta_theta
 		ViewableAtomic Transducer = new Transducer("Transducer", 1000); // second argument is # of generations
+		ViewableAtomic Crossover = new Crossover("Crossover", 0.1, 1); // second argument is probability of crossing over; third is selective pressure
+		ViewableAtomic Mutator = new Mutator("Mutator", 0.00); // second argument is the probability of mutation
 
 		add(Fitness);
 		add(Generator);
 		add(Transducer);
+		add(Crossover);
+		add(Mutator);
 
 		addOutport("out_population");
 
 		addCoupling(Generator, "out_population", Fitness, "in_population");
 		addCoupling(Generator, "delta_theta", Fitness, "delta_theta");
 		addCoupling(Fitness, "out_population", Transducer, "in_population");
+		addCoupling(Fitness, "out_population", Crossover, "in_population");
+		addCoupling(Crossover, "out_population", Mutator, "in_population");
+		addCoupling(Mutator, "out_population", Fitness, "in_population");
 		
 		addCoupling(Fitness, "out_population", this, "out_population");
 	}
@@ -36,8 +43,10 @@ public class PopulationGenetics extends ViewableDigraph {
      */
     public void layoutForSimView()
     {
-        preferredSize = new Dimension(591, 145);
-        ((ViewableComponent)withName("Fitness")).setPreferredLocation(new Point(240, 50));
-        ((ViewableComponent)withName("Generator")).setPreferredLocation(new Point(27, 50));
+        preferredSize = new Dimension(591, 313);
+        ((ViewableComponent)withName("Transducer")).setPreferredLocation(new Point(249, 187));
+        ((ViewableComponent)withName("Crossover")).setPreferredLocation(new Point(-8, 148));
+        ((ViewableComponent)withName("Generator")).setPreferredLocation(new Point(7, 12));
+        ((ViewableComponent)withName("Fitness")).setPreferredLocation(new Point(197, 31));
     }
 }

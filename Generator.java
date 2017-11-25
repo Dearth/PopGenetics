@@ -24,7 +24,6 @@ public class Generator extends ViewableAtomic {
 
 	public void initialize() {
 		holdIn("active", 0);
-
 		//initial value 
 		count = 0;
 		super.initialize();
