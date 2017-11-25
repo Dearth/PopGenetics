@@ -1,10 +1,17 @@
 package PopGenetics;
 
 import GenCol.*;
-
 import model.modeling.*;
-
 import view.modeling.ViewableAtomic;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+
+import java.io.File;
+import java.io.IOException;
 
 public class Transducer extends ViewableAtomic {
 	
@@ -39,17 +46,23 @@ public class Transducer extends ViewableAtomic {
 			pop = (Population) returned;
 			storage[generation] = pop;
 			generation += 1;
+			holdIn("active", 0);
 		}
-		if(generation == 999)
-		{
-			// write data structure to file
-			ObjectMapper mapper = new ObjectMapper();
+		
+		// write data structure to file
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+		//Object to JSON in file
+		try {
+			mapper.writeValue(new File("/home/joe/Downloads/storage.json"), storage);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 	
 	public void deltint() {
 		passivate();
-		phase = "waiting";
 	}
 	
 	public void deltcon(double e, message x) {
@@ -75,30 +88,3 @@ public class Transducer extends ViewableAtomic {
 		return super.getTooltipText();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

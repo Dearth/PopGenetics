@@ -63,6 +63,7 @@ public class Fitness extends ViewableAtomic {
 			Object returned = ObjectUtil.deserializeObjectFromString(temp);
 			pop = (Population) returned;
 			evaluate_fitness();
+			holdIn("active", 0);
 		}
 			
 	}
@@ -95,4 +96,3 @@ public class Fitness extends ViewableAtomic {
 	}
 	
 }
-
