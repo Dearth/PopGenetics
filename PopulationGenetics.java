@@ -11,7 +11,7 @@ import view.modeling.ViewableDigraph;
 public class PopulationGenetics extends ViewableDigraph {
 
 	public PopulationGenetics() {
-		super("RMSD");
+		super("PopGenetics");
 
 		ViewableAtomic Fitness = new Fitness("Fitness");
 		ViewableAtomic Generator = new Generator("Generator", 0); // first argument is delta_theta

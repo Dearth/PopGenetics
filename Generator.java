@@ -12,7 +12,7 @@ public class Generator extends ViewableAtomic {
 	protected double delta_theta;
 
 	public Generator() { // default constructor
-		this("Requester", 0);
+		this("Generator", 0);
 	}
 
 	public Generator(String name, double delta_theta) {

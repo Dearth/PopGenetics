@@ -4,6 +4,7 @@ import java.util.Random;
 import java.io.Serializable;
 
 public class Individual implements Serializable, Comparable<Individual>{
+	private static final long serialVersionUID = 1L;
 	protected double fitness;
 	protected boolean x_genome[];
 	protected boolean y_genome[];
@@ -14,19 +15,19 @@ public class Individual implements Serializable, Comparable<Individual>{
 		x_genome = new boolean[size];
 		y_genome = new boolean[size];
 		random = new Random();
-		int x_limit = random.nextInt() % size;
-		int y_limit = random.nextInt() % size;
+		int x_limit = random.nextInt(size);
+		int y_limit = random.nextInt(size);
 		
 		// set a uniform random # of true per array
 		for (int i = 0; i < size; i++) {
 			if(i < x_limit)
 				x_genome[i] = true;
-			else
+			else if (i >= y_limit)
 				x_genome[i] = false;
 			
 			if(i < y_limit)		
 				y_genome[i] = true;
-			else
+			else if (i >= y_limit)
 				y_genome[i] = false;
 		}
 	}
@@ -44,7 +45,7 @@ public class Individual implements Serializable, Comparable<Individual>{
 		for(boolean b : x_genome) {
 		    sum += b ? 1 : 0;
 		}
-		double x_coord = (double) sum / x_genome.length;
+		double x_coord = (double) sum / (double) x_genome.length;
 		return x_coord;
 	}
 	
@@ -57,7 +58,7 @@ public class Individual implements Serializable, Comparable<Individual>{
 		for(boolean b : y_genome) {
 		    sum += b ? 1 : 0;
 		}
-		double y_coord = (double) sum / y_genome.length;
+		double y_coord = (double) sum / (double) y_genome.length;
 		return y_coord;
 	}
 	

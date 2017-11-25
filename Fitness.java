@@ -1,7 +1,5 @@
 package PopGenetics;
 
-import java.io.IOException;
-
 import GenCol.*;
 import model.modeling.*;
 import view.modeling.ViewableAtomic;
@@ -39,10 +37,8 @@ public class Fitness extends ViewableAtomic {
 	}
 	
 	public void evaluate_fitness() {
-		double x, y;
-		
-		for (Individual i : pop.population)
-		{
+		double x, y;	
+		for (Individual i : pop.population) {
 			x = i.get_x_coord();
 			y = i.get_y_coord();
 			i.setFitness(this.fitness(x, y, radius, theta));
@@ -56,17 +52,19 @@ public class Fitness extends ViewableAtomic {
 
 		// if the message is on the delta_theta port, set delta_theta;
 		// else take in a population, iterate over individuals, extract x and y, evaluate fitness, and update population
-			if(messageOnPort(x, "in_population", 0)) {
-				String temp = x.getValOnPort("in_population", 0).toString();
-				Object returned = new Object();
-				returned = ObjectUtil.deserializeObjectFromString(temp);
-				Population p = (Population) returned;
-				pop = p;			
-				evaluate_fitness();
-			}
-			if (messageOnPort(x, "delta_theta", 0)) {
-					delta_theta = Float.parseFloat(x.getValOnPort("delta_theta", 0).toString());
-				}
+		if (messageOnPort(x, "delta_theta", 0)) {
+			delta_theta = Float.parseFloat(x.getValOnPort("delta_theta", 0).toString());
+		}
+			
+		if (messageOnPort(x, "in_population", 0)) {
+			String temp = x.getValOnPort("in_population", 0).toString();
+			System.out.println("DEBUG: printing the population string ");
+			System.out.println(temp);
+			Object returned = ObjectUtil.deserializeObjectFromString(temp);
+			pop = (Population) returned;
+			evaluate_fitness();
+		}
+			
 	}
 	
 	public void deltint() {
