@@ -3,13 +3,13 @@ package PopGenetics;
 import java.util.Random;
 
 public class Individual implements Comparable<Individual>{
-	protected int fitness;
+	protected double fitness;
 	protected boolean x_genome[];
 	protected boolean y_genome[];
 	protected Random random;
 	
 	public Individual(int size) {
-		fitness = 0;
+		fitness = 0.0;
 		x_genome = new boolean[size];
 		y_genome = new boolean[size];
 		random = new Random();
@@ -50,8 +50,7 @@ public class Individual implements Comparable<Individual>{
 		return y_coord;
 	}
 	
-	public void setFitness(int fit) {
-		this.fitness = fit;
+	public void setFitness(double fit) {
 	}
 	
 	public void mutate(double mutation_rate)
@@ -62,7 +61,7 @@ public class Individual implements Comparable<Individual>{
 				x_genome[i] = random.nextBoolean();
 			}
 			if(random.nextDouble() < mutation_rate) {
-				y_genome[i] = random.nextBoolean()
+				y_genome[i] = random.nextBoolean();
 			}
 		}
 	}
@@ -118,7 +117,7 @@ public class Individual implements Comparable<Individual>{
 	
 	@Override
 	public int compareTo(Individual i) {
-		return this.fitness - i.fitness;
+        return Double.compare(this.fitness, i.fitness);
 	}
 }
 

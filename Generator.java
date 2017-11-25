@@ -10,16 +10,18 @@ public class Generator extends ViewableAtomic {
 
 	// variable for sequencing order of internal transition states and thus outputs
 	protected int count;
+	protected Population p;
+	protected double delta_theta;
 
-	public Generator() {
-		this("Requester");
+	public Generator() { // default constructor
+		this("Requester", 0);
 	}
 
-	public Generator(String name) {
+	public Generator(String name, double delta_theta) {
 		super(name);
-		addInport("in");
-		addOutport("outGreen");
-		addOutport("outRed");
+		this.delta_theta = delta_theta;
+		addOutport("out_population");
+		addOutport("delta_theta");
 	}
 
 	public void initialize() {
@@ -27,6 +29,7 @@ public class Generator extends ViewableAtomic {
 
 		//initial value 
 		count = 0;
+		p = new Population();
 		super.initialize();
 	}
 
@@ -40,13 +43,9 @@ public class Generator extends ViewableAtomic {
 		if (phaseIs("active")) {
 
 			if (count == 0)
-				holdIn("active", 3.7);
+				holdIn("active", 1);
 			else if (count == 1)
-				holdIn("active", 6);
-			else if (count == 2)
-				holdIn("active",5.3);
-			else if (count == 3)
-				holdIn("active", 6);
+				holdIn("active", 1);
 			
 			//stops scheduling of outputs
 			else
@@ -62,18 +61,12 @@ public class Generator extends ViewableAtomic {
 		message m = new message();
 		
 		//default content is needed  
-		content con = makeContent("outGreen", new entity("none"));
+		content con = makeContent("out_population", new entity("none"));
 		
 		if (count == 0)
-			con = makeContent("outGreen", new entity("True"));
+			con = makeContent("delta_theta", new entity(String.valueOf(delta_theta)));
 		else if (count == 1)
-			con = makeContent("outRed", new entity("True"));
-		else if (count == 2)
-			con = makeContent("outRed", new entity("True"));
-		else if (count == 3)
-			con = makeContent("outGreen", new entity("True"));
-		else if (count == 4)
-			con = makeContent("outRed", new entity("True"));
+			con = makeContent("out_population", new entity(ObjectUtil.serializeObjectToString(p)));
 
 		m.add(con);
 

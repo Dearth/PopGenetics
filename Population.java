@@ -43,9 +43,6 @@ public class Population implements Serializable{
 		for (int i = 0; i < this.population.length; i++) {
 			this.population[i].mutate(this.mutation_rate);
 			}
-		}
 	}
-	
-	public void 
-	
+		
 }

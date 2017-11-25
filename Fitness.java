@@ -1,9 +1,10 @@
 package PopGenetics;
 
+import java.io.IOException;
+
 import GenCol.*;
 import model.modeling.*;
 import view.modeling.ViewableAtomic;
-import Math
 
 public class Fitness extends ViewableAtomic {
 	
@@ -47,25 +48,25 @@ public class Fitness extends ViewableAtomic {
 			i.setFitness(this.fitness(x, y, radius, theta));
 		}
 		
-		theta += delta_theta; // rotate fitness fcn in advance of next call
+		theta += delta_theta; // rotate fitness function in advance of next call
 	}
 	
 	public void deltext(double e, message x) {
 		Continue(e);
 
 		// if the message is on the delta_theta port, set delta_theta;
-		// else take in a population, iterate over individuals, extract x and y, eval fitness, and update population
+		// else take in a population, iterate over individuals, extract x and y, evaluate fitness, and update population
 			if(messageOnPort(x, "in_population", 0)) {
-				String temp = x.getValOnPort("in_population", 0);
-				Object returned = ObjectUtil.deserializeObjectFromString(temp);
+				String temp = x.getValOnPort("in_population", 0).toString();
+				Object returned = new Object();
+				returned = ObjectUtil.deserializeObjectFromString(temp);
 				Population p = (Population) returned;
 				pop = p;			
 				evaluate_fitness();
 			}
 			if (messageOnPort(x, "delta_theta", 0)) {
-					delta_theta = x.getValOnPort("delta_theta", 0);
+					delta_theta = Float.parseFloat(x.getValOnPort("delta_theta", 0).toString());
 				}
-			}
 	}
 	
 	public void deltint() {
@@ -81,7 +82,8 @@ public class Fitness extends ViewableAtomic {
 	public message out() {
 		message m = new message();
 		content con;		
-		String serialized = ObjectUtil.serializeObjectToString(pop);
+		String serialized = "";
+		serialized = ObjectUtil.serializeObjectToString(pop);
 		con = makeContent("out_population", new entity(serialized));
 		m.add(con);
 		return m;

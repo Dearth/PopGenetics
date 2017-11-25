@@ -13,20 +13,21 @@ public class PopulationGenetics extends ViewableDigraph {
 	public PopulationGenetics() {
 		super("RMSD");
 
-		ViewableAtomic Requester = new Requester("Requester");
-		ViewableAtomic MSD = new MSD("MSD");
+		ViewableAtomic Fitness = new Fitness("Fitness");
+		ViewableAtomic Generator = new Generator("Generator", 0); // first arg is delta_theta
 
-		add(Requester);
-		add(MSD);
+		add(Fitness);
+		add(Generator);
 
-		addOutport("outGreen");
-		addOutport("outRed");
+		addOutport("out_population");
+//		addOutport("outRed");
 
-		addCoupling(Requester, "outGreen", MSD, "inGreen");
-		addCoupling(Requester, "outRed", MSD, "inRed");
+		addCoupling(Generator, "out_population", Fitness, "in_population");
+		addCoupling(Generator, "delta_theta", Fitness, "delta_theta");
+//		addCoupling(Requester, "outRed", MSD, "inRed");
 
-		addCoupling(MSD, "outGreen", this, "outGreen");
-		addCoupling(MSD, "outRed", this, "outRed");
+//		addCoupling(MSD, "outGreen", this, "outGreen");
+		addCoupling(Fitness, "out_population", this, "out_population");
 	}
 
     /**
@@ -36,7 +37,7 @@ public class PopulationGenetics extends ViewableDigraph {
     public void layoutForSimView()
     {
         preferredSize = new Dimension(591, 145);
-        ((ViewableComponent)withName("MSD")).setPreferredLocation(new Point(240, 50));
-        ((ViewableComponent)withName("Requester")).setPreferredLocation(new Point(27, 50));
+        ((ViewableComponent)withName("Fitness")).setPreferredLocation(new Point(240, 50));
+        ((ViewableComponent)withName("Generator")).setPreferredLocation(new Point(27, 50));
     }
 }
