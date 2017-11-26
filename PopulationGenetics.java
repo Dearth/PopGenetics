@@ -14,8 +14,8 @@ public class PopulationGenetics extends ViewableDigraph {
 		super("PopGenetics");
 
 		ViewableAtomic Fitness = new Fitness("Fitness");
-		ViewableAtomic Generator = new Generator("Generator", 0, 0.1, 1, 0.00); // delta_theta, p_crossover, selective_pressure, p_mutate
-		ViewableAtomic Transducer = new Transducer("Transducer", 1); // second argument is # of generations
+		ViewableAtomic Generator = new Generator("Generator", 0, 0.1, 1, 0.00, "0_0.1_1_0.0"); // delta_theta, p_crossover, selective_pressure, p_mutate
+		ViewableAtomic Transducer = new Transducer("Transducer", 1000, "default"); // second argument is # of generations
 		ViewableAtomic Crossover = new Crossover("Crossover", 0.1, 1); // second argument is probability of crossing over; third is selective pressure
 		ViewableAtomic Mutator = new Mutator("Mutator", 0.00); // second argument is the probability of mutation
 
@@ -32,6 +32,7 @@ public class PopulationGenetics extends ViewableDigraph {
 		addCoupling(Generator, "p_crossover", Crossover, "p_crossover");
 		addCoupling(Generator, "selective_pressure", Crossover, "selective_pressure");
 		addCoupling(Generator, "p_mutate", Mutator, "p_mutate");
+		addCoupling(Generator, "filename", Transducer, "filename");
 		
 		addCoupling(Fitness, "out_population", Transducer, "in_population");
 		addCoupling(Fitness, "out_population", Crossover, "in_population");

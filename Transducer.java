@@ -17,18 +17,21 @@ public class Transducer extends ViewableAtomic {
 	
 	Population pop;
 	Population storage[];
+	String filename;
 	int generation_limit;
 	int generation = 0;
 	
 	public Transducer() {
-		this("Transducer", 1000);
+		this("Transducer", 1000, "default");
 	}
 	
-	public Transducer(String name, int generations) {
+	public Transducer(String name, int generations, String filename) {
 		super(name);
 		storage = new Population[generations];
 		this.generation_limit = generations;
+		this.filename = filename;
 		addInport("in_population");
+		addInport("filename");
 		addOutport("out_population");
 		addOutport("stop");
 	}
@@ -42,7 +45,12 @@ public class Transducer extends ViewableAtomic {
 		
 		// if the message is on the delta_theta port, set delta_theta;
 		// else take in a population, iterate over individuals, extract x and y, evaluate fitness, and update population
-			
+		if (messageOnPort(x, "filename", 0))
+		{
+			filename = x.getValOnPort("filename", 0).toString();
+		}
+		
+		
 		if (messageOnPort(x, "in_population", 0)) {
 			String temp = x.getValOnPort("in_population", 0).toString();
 			Object returned = ObjectUtil.deserializeObjectFromString(temp);
@@ -58,7 +66,7 @@ public class Transducer extends ViewableAtomic {
 				mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 				//Object to JSON in file
 				try {
-					mapper.writeValue(new File("/home/joe/Downloads/storage.json"), storage);
+					mapper.writeValue(new File("/home/joe/Downloads/" + filename + ".json"), storage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
