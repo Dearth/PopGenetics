@@ -42,7 +42,7 @@ public class Fitness extends ViewableAtomic {
 		for (Individual i : pop.population) {
 			x = i.get_x_coord();
 			y = i.get_y_coord();
-			i.setFitness(this.fitness(x, y, radius, theta));
+			i.setFitness(fitness(x, y, radius, theta));
 		}
 		
 		theta += delta_theta; // rotate fitness function in advance of next call

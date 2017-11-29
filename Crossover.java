@@ -45,7 +45,7 @@ public class Crossover extends ViewableAtomic {
 			String temp = x.getValOnPort("in_population", 0).toString();
 			Object returned = ObjectUtil.deserializeObjectFromString(temp);
 			current = (Population) returned;
-			next = current;
+			next = new Population();
 			// until new pop is full, pick individuals to cross over w/ prob prop to fitness ^ pressure
 			double values[] = new double[current.population.length];
 			int index = 0;
@@ -70,7 +70,7 @@ public class Crossover extends ViewableAtomic {
 			
 			// with prob p_crossover, cross over two individuals
 			// with prob 1-p_crossover, select a single individual and pass it along
-			for (int i = 0; i < values.length; i++)
+			for (int i = 0; i < current.population.length; i++)
 			{
 				Individual a;
 				Individual b;

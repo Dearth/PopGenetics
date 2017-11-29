@@ -63,6 +63,7 @@ public class Individual implements Serializable, Comparable<Individual>{
 	}
 	
 	public void setFitness(double fit) {
+		fitness = fit;
 	}
 	
 	public void mutate(double mutation_rate)
