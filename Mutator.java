@@ -37,8 +37,8 @@ public class Mutator extends ViewableAtomic {
 		if (messageOnPort(x, "in_population", 0)) {
 			String temp = x.getValOnPort("in_population", 0).toString();
 			Object returned = ObjectUtil.deserializeObjectFromString(temp);
-			pop = (Population) returned;
-			
+			pop = new  Population();
+			pop.set_values((Population) returned);			
 			pop.mutation_rate = p_mutate;
 			pop.mutatePopulation();
 			

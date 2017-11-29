@@ -64,8 +64,37 @@ public class Individual implements Serializable, Comparable<Individual>{
 		return this.y_coord;
 	}
 	
+	public void set_x_genome(boolean[] a) {
+		x_genome = a.clone();
+	}
+	
+	public void set_y_genome(boolean[] a) {
+		y_genome = a.clone();
+	}
+	
+	public void set_x_coord(double x){
+		x_coord = x;
+	}
+	
+	public void set_y_coord(double y) {
+		y_coord = y;
+	}
+	
 	public void setFitness(double fit) {
 		fitness = fit;
+	}
+	
+	public double getFitness() {
+		return fitness;
+	}
+	
+	public void set_values(Individual other) {
+		fitness = other.fitness;
+		x_genome = other.x_genome.clone();
+		y_genome = other.y_genome.clone();
+		y_coord = other.y_coord;
+		x_coord = other.x_coord;
+		random = other.random;
 	}
 	
 	public void mutate(double mutation_rate)
