@@ -49,5 +49,21 @@ public class Population implements Serializable{
 			this.population[i].mutate(this.mutation_rate);
 			}
 	}
+	
+	public void set_values(Population other) {
+		generation = other.generation;
+		mutation_rate = other.mutation_rate;
+		selection_strength = other.selection_strength;
+		population = other.population.clone();
+		random = other.random;
+	}
+	
+	public void set_individual(int index, Individual to_copy) {
+		population[index].setFitness(to_copy.getFitness());
+		population[index].set_x_coord(to_copy.get_x_coord());
+		population[index].set_x_genome(to_copy.get_x_genome());
+		population[index].set_y_coord(to_copy.get_y_coord());
+		population[index].set_y_genome(to_copy.get_y_genome());		
+	}
 		
 }

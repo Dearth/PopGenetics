@@ -31,7 +31,7 @@ public class Fitness extends ViewableAtomic {
 	public double fitness(double x, double y, double r, double theta) {
 		double ret, x_part, y_part, pow;
 		x_part = Math.pow((x - r*Math.cos(theta) - 0.5), 2) / 2;
-		y_part = Math.pow((y - r*Math.cos(theta) - 0.5), 2) / 2;
+		y_part = Math.pow((y - r*Math.sin(theta) - 0.5), 2) / 2;
 		pow = (-1.0) * (x_part + y_part);
 		ret = Math.pow(Math.E, pow);
 		return ret;
@@ -66,7 +66,8 @@ public class Fitness extends ViewableAtomic {
 			if (messageOnPort(x, "in_population", 0)) {
 				String temp = x.getValOnPort("in_population", 0).toString();
 				Object returned = ObjectUtil.deserializeObjectFromString(temp);
-				pop = (Population) returned;
+				pop = new  Population();
+				pop.set_values((Population) returned);		
 				evaluate_fitness();
 				
 				// if the phase is set to stop, then cease the loop and set to passive.

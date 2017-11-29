@@ -55,7 +55,8 @@ public class Transducer extends ViewableAtomic {
 			String temp = x.getValOnPort("in_population", 0).toString();
 			Object returned = ObjectUtil.deserializeObjectFromString(temp);
 			pop = (Population) returned;
-			storage[generation] = pop;
+			storage[generation] = new Population();
+			storage[generation].set_values(pop);
 			generation += 1;
 			holdIn("active", 0);
 			
