@@ -67,7 +67,7 @@ public class Transducer extends ViewableAtomic {
 				mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 				//Object to JSON in file
 				try {
-					mapper.writeValue(new File("/home/joe/Downloads/" + filename + ".json"), storage);
+					mapper.writeValue(new File(filename + ".json"), storage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
