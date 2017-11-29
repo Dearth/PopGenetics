@@ -8,6 +8,8 @@ public class Individual implements Serializable, Comparable<Individual>{
 	protected double fitness;
 	protected boolean x_genome[];
 	protected boolean y_genome[];
+	protected double y_coord;
+	protected double x_coord;
 	protected Random random;
 	
 	public Individual(int size) {
@@ -45,8 +47,8 @@ public class Individual implements Serializable, Comparable<Individual>{
 		for(boolean b : x_genome) {
 		    sum += b ? 1 : 0;
 		}
-		double x_coord = (double) sum / (double) x_genome.length;
-		return x_coord;
+		this.x_coord = (double) sum / (double) x_genome.length;
+		return this.x_coord;
 	}
 	
 	public boolean[] get_y_genome() {
@@ -58,8 +60,8 @@ public class Individual implements Serializable, Comparable<Individual>{
 		for(boolean b : y_genome) {
 		    sum += b ? 1 : 0;
 		}
-		double y_coord = (double) sum / (double) y_genome.length;
-		return y_coord;
+		this.y_coord = (double) sum / (double) y_genome.length;
+		return this.y_coord;
 	}
 	
 	public void setFitness(double fit) {
