@@ -102,6 +102,8 @@ class Population:
             self.population[i].normal_fitness = self.population[i].fitness / s
 
     def evaluate_fitness(self):
+        x = 0.0
+        y = 0.0
         for i in range(len(self.population)):
             x, y = self.population[i].evaluate_fitness()
         
@@ -139,6 +141,7 @@ class Population:
 
         self.population = copy.deepcopy(temp_pop)
 
+
 def get_fitness(data, generations=100, individuals=100):
     fit = np.zeros(generations)
 
@@ -149,6 +152,7 @@ def get_fitness(data, generations=100, individuals=100):
         fit[i] = s / individuals
 
     return fit
+
 
 def get_loci_entropy(data, generations=100, individuals=100, genome_size=20):
     x_entropy = []
@@ -176,15 +180,19 @@ def get_loci_entropy(data, generations=100, individuals=100, genome_size=20):
 
     return x_entropy, y_entropy
 
+
 def get_genome_entropy(data, generations=100, individuals=100, genome_size=20):
     x_entropy = []
     y_entropy = []
+    x_e_sum = 0.0
+    y_e_sum = 0.0
 
     for i in range(generations):
+        pop_x_entropy = {}
+        pop_y_entropy = {}
         for j in range(individuals):
-            x = data[i].population[j].x_genome
-            y = data[i].population[j].y_genome
-
+            x = str(data[i].population[j].x_genome)
+            y = str(data[i].population[j].y_genome)
             pop_x_entropy[x] = pop_x_entropy.get(x, 0.0) + 1.0
             pop_y_entropy[y] = pop_y_entropy.get(y, 0.0) + 1.0
 
@@ -206,35 +214,41 @@ def get_genome_entropy(data, generations=100, individuals=100, genome_size=20):
 
     return x_entropy, y_entropy
 
+
 def get_location_entropy(data, generations=100, individuals=100, genome_size=20):
- x_entropy = []
- y_entropy = []
+    x_entropy = []
+    y_entropy = []
+    x_e_sum = 0.0
+    y_e_sum = 0.0
 
- for i in range(generations):
-     for j in range(individuals):
-         x = sum(data[i].population[j].x_genome)
-         y = sum(data[i].population[j].y_genome)
+    for i in range(generations):
+        pop_x_entropy = {}
+        pop_y_entropy = {}
+        for j in range(individuals):
+            x = sum(data[i].population[j].x_genome)
+            y = sum(data[i].population[j].y_genome)
 
-         pop_x_entropy[x] = pop_x_entropy.get(x, 0.0) + 1.0
-         pop_y_entropy[y] = pop_y_entropy.get(y, 0.0) + 1.0
+            pop_x_entropy[x] = pop_x_entropy.get(x, 0.0) + 1.0
+            pop_y_entropy[y] = pop_y_entropy.get(y, 0.0) + 1.0
 
-     for j in range(20):
-         x_e_sum = 0.0
-         y_e_sum = 0.0
+        for j in range(20):
+            x_e_sum = 0.0
+            y_e_sum = 0.0
 
-         x_p = pop_x_entropy.get(j, 0.0) / individuals
-         y_p = pop_y_entropy.get(j, 0.0) / individuals
-         
-         if x_p > 0:
-             x_e_sum += -x_p*math.log(x_p, 2) 
-         
-         if y_p > 0:
-             y_e_sum += -y_p*math.log(y_p, 2) 
+            x_p = pop_x_entropy.get(j, 0.0) / individuals
+            y_p = pop_y_entropy.get(j, 0.0) / individuals
 
-     x_entropy.append(x_e_sum / 20.0)
-     y_entropy.append(y_e_sum / 20.0)
+            if x_p > 0:
+                x_e_sum += -x_p*math.log(x_p, 2)
 
- return x_entropy, y_entropy
+            if y_p > 0:
+                y_e_sum += -y_p*math.log(y_p, 2)
+
+        x_entropy.append(x_e_sum / 20.0)
+        y_entropy.append(y_e_sum / 20.0)
+
+    return x_entropy, y_entropy
+
 
 def plot_fitness(filename, data, generations=100, individuals=100):
     x = data[generations - 1].fitness_x
@@ -250,7 +264,7 @@ def gen_graphs(filename, data):
     print("Processing " + filename)
 
     x = range(100)
-    e_loci_x, e_loci_y = get_entropy(data)
+    e_loci_x, e_loci_y = get_loci_entropy(data)
     e_loca_x, e_loca_y = get_location_entropy(data)
     e_geno_x, e_geno_y = get_genome_entropy(data)
     f = get_fitness(data)
