@@ -26,12 +26,12 @@ class Individual:
 		for i in range(len(self.x_genome)):
 			rand = np.random.random()
 			if rand < self.mut_rate:
-				self.x_genome[i] = (self.x_genome[i] + 1)%2
+				self.x_genome[i] = np.random.choice([0,1])
 
 		for i in range(len(self.y_genome)):
 			rand = np.random.random()
 			if rand < self.mut_rate:
-				self.y_genome[i] = (self.y_genome[i] + 1)%2
+				self.y_genome[i] = np.random.choice([0,1])
 
 	def onePointCrossover(self, other):
 		temp = Individual()
@@ -139,10 +139,23 @@ class Population:
 
 def get_loci_entropy(data, generations=100, individuals=100, genome_size=20):
 	entropy = np.zeros(generations);
+	x_entropy = []
+	y_entropy = []
 
 	for i in range(generations):
+		x_entropy_sum = 0
+		y_entropy_sum = 0
 		for j in range(genome_size):
-			for k in range(
+			one_count_x = 0
+			one_count_y = 0
+			for k in range(individuals):
+				one_count_x = data[i].population[k].x_genome[j]
+				one_count_y = data[i].population[k].y_genome[j]
+
+			if 0 != one_count_x and individuals != one_count_x:
+				
+			if 0 == one_count_x or individuals == one_count_x:
+				
 		
 
 def get_fitness(data, generations=100, individuals=100):
