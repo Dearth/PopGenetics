@@ -23,12 +23,12 @@ class Individual:
         for i in range(len(self.x_genome)):
             rand = np.random.random()
             if rand < self.mut_rate:
-                self.x_genome[i] = (self.x_genome[i] + 1) % 2
+                self.x_genome[i] = np.random.choice([0,1])
 
         for i in range(len(self.y_genome)):
             rand = np.random.random()
             if rand < self.mut_rate:
-                self.y_genome[i] = (self.y_genome[i] + 1) % 2
+                self.y_genome[i] = np.random.choice([0,1])
 
     def one_point_crossover(self, other):
         temp = copy.deepcopy(other)
@@ -60,7 +60,6 @@ class Individual:
         y_val = math.pow((y_coord - y_offset), 2) / (2.0 * math.pow(self.fit_var, 2))
 
         self.fit_theta = self.fit_theta + self.fit_delta
-        print("debug, theta is: " + str(self.fit_theta))
 
         self.fitness = math.pow(math.exp(-(x_val + y_val)), self.select_pres)
         return x_offset, y_offset
