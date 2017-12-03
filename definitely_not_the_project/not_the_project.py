@@ -188,24 +188,28 @@ def get_genome_entropy(data, generations=100, individuals=100, genome_size=20):
     y_e_sum = 0.0
 
     for i in range(generations):
-        pop_x_entropy = {}
-        pop_y_entropy = {}
+        pop_x_entropy = dict()
+        pop_y_entropy = dict()
         for j in range(individuals):
             x = str(data[i].population[j].x_genome)
             y = str(data[i].population[j].y_genome)
+    
             pop_x_entropy[x] = pop_x_entropy.get(x, 0.0) + 1.0
             pop_y_entropy[y] = pop_y_entropy.get(y, 0.0) + 1.0
 
-        for j in range(20):
+        for k in pop_x_entropy:
             x_e_sum = 0.0
-            y_e_sum = 0.0
-
-            x_p = pop_x_entropy.get(j, 0.0) / individuals
-            y_p = pop_y_entropy.get(j, 0.0) / individuals
+			
+            x_p = pop_x_entropy.get(k, 0.0) / individuals
          
             if x_p > 0:
                 x_e_sum += -x_p*math.log(x_p, 2) 
          
+        for k in pop_y_entropy:
+            y_e_sum = 0.0
+            
+            y_p = pop_y_entropy.get(k, 0.0) / individuals
+            
             if y_p > 0:
                 y_e_sum += -y_p*math.log(y_p, 2) 
 
@@ -222,8 +226,8 @@ def get_location_entropy(data, generations=100, individuals=100, genome_size=20)
     y_e_sum = 0.0
 
     for i in range(generations):
-        pop_x_entropy = {}
-        pop_y_entropy = {}
+        pop_x_entropy = dict()
+        pop_y_entropy = dict()
         for j in range(individuals):
             x = sum(data[i].population[j].x_genome)
             y = sum(data[i].population[j].y_genome)
@@ -231,16 +235,19 @@ def get_location_entropy(data, generations=100, individuals=100, genome_size=20)
             pop_x_entropy[x] = pop_x_entropy.get(x, 0.0) + 1.0
             pop_y_entropy[y] = pop_y_entropy.get(y, 0.0) + 1.0
 
-        for j in range(20):
+        for k in pop_x_entropy:
             x_e_sum = 0.0
-            y_e_sum = 0.0
 
             x_p = pop_x_entropy.get(j, 0.0) / individuals
-            y_p = pop_y_entropy.get(j, 0.0) / individuals
 
             if x_p > 0:
                 x_e_sum += -x_p*math.log(x_p, 2)
 
+        for k in pop_y_entropy:
+            y_e_sum = 0.0
+            
+            y_p = pop_y_entropy.get(j, 0.0) / individuals
+            
             if y_p > 0:
                 y_e_sum += -y_p*math.log(y_p, 2)
 
@@ -269,39 +276,39 @@ def gen_graphs(filename, data):
     e_geno_x, e_geno_y = get_genome_entropy(data)
     f = get_fitness(data)
 
-    plot_fitness(filename, data)
-
-    plt.figure(1)
-    plt.plot(x, e_loci_x, x, e_loci_y)
-    plt.title('Genetic Loci Entropy over time')
-    plt.xlabel("Generation")
-    plt.ylabel("Binary Entropy")
-    plt.savefig("./graphs/" + filename + "_loci_entropy.png")
-    plt.clf()
-
-    plt.figure(1)
-    plt.plot(x, e_loca_x, x, e_loca_y)
-    plt.title('Location Entropy over time')
-    plt.xlabel("Generation")
-    plt.ylabel("Binary Entropy")
-    plt.savefig("./graphs/" + filename + "_location_entropy.png")
-    plt.clf()
- 
-    plt.figure(1)
-    plt.plot(x, e_geno_x, x, e_geno_y)
-    plt.title('Genome Entropy over time')
-    plt.xlabel("Generation")
-    plt.ylabel("Binary Entropy")
-    plt.savefig("./graphs/" + filename + "_genom_entropy.png")
-    plt.clf()
-
-    plt.figure(1)
-    plt.plot(x, f)
-    plt.title('Population Fitness over time')
-    plt.xlabel("Generation")
-    plt.ylabel("Average Fitness")
-    plt.savefig("./graphs/" + filename + "_fitness.png")
-    plt.clf()
+#    plot_fitness(filename, data)
+#
+#    plt.figure(1)
+#    plt.plot(x, e_loci_x, x, e_loci_y)
+#    plt.title('Genetic Loci Entropy over time')
+#    plt.xlabel("Generation")
+#    plt.ylabel("Binary Entropy")
+#    plt.savefig("./graphs/" + filename + "_loci_entropy.png")
+#    plt.clf()
+#
+#    plt.figure(1)
+#    plt.plot(x, e_loca_x, x, e_loca_y)
+#    plt.title('Location Entropy over time')
+#    plt.xlabel("Generation")
+#    plt.ylabel("Binary Entropy")
+#    plt.savefig("./graphs/" + filename + "_location_entropy.png")
+#    plt.clf()
+# 
+#    plt.figure(1)
+#    plt.plot(x, e_geno_x, x, e_geno_y)
+#    plt.title('Genome Entropy over time')
+#    plt.xlabel("Generation")
+#    plt.ylabel("Binary Entropy")
+#    plt.savefig("./graphs/" + filename + "_genom_entropy.png")
+#    plt.clf()
+#
+#    plt.figure(1)
+#    plt.plot(x, f)
+#    plt.title('Population Fitness over time')
+#    plt.xlabel("Generation")
+#    plt.ylabel("Average Fitness")
+#    plt.savefig("./graphs/" + filename + "_fitness.png")
+#    plt.clf()
 
 
 def run_sim():
