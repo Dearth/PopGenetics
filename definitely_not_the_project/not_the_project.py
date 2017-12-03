@@ -311,7 +311,7 @@ def run_sim():
                     p.select_and_crossover()
 
                 data.append(p)
-#                gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
+                gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
 
 
 if __name__ == "__main__":
