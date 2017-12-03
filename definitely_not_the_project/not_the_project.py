@@ -12,6 +12,7 @@ import copy
 class Individual:
 	def __init__(self, fit_var=0.1, fitness = 0.0, mut_rate = 0.0, fit_r = 0, fit_delta=0, fit_theta=0, select_pres = 1.0):
 		self.fitness = fitness
+		self.normal_fitness = 0.0
 		self.mut_rate = mut_rate
 		self.fit_delta = fit_delta
 		self.fit_r = fit_r
@@ -87,7 +88,7 @@ class Population:
 			s += self.population[i].fitness
 
 		for i in range(len(self.population)):
-			self.population[i].fitness /= s 
+			self.population[i].normal_fitness = self.population[i].fitness / s 
 
 	def evaluateFitness(self):
 		for i in range(len(self.population)):
@@ -102,7 +103,7 @@ class Population:
 		s = 0.0
 
 		for i in range(len(self.population)):
-			s += self.population[i].fitness
+			s += self.population[i].normal_fitness
 			
 			if s >= rand:
 				return i
@@ -136,23 +137,12 @@ class Population:
 # fitness seems to be 0. what's the bug there?
 # pprint(data)
 
-def get_entropy(data, generations=100, individuals=100, genome_size=20):
+def get_loci_entropy(data, generations=100, individuals=100, genome_size=20):
 	entropy = np.zeros(generations);
 
 	for i in range(generations):
-		one_count = 0
-		for j in range(individuals):
-			for x in range(genome_size):
-				one_count += float(data[i].population[j].x_genome[x])
-				one_count += float(data[i].population[j].y_genome[x])
-		
-		if 0 == one_count or (2*individuals*genome_size) == one_count:
-			entropy[i] = 0
-		else:
-			p = one_count / (2*individuals*genome_size)
-			entropy[i] = -p*log(p,2) - (1.0-p)* log(1.0-p, 2)
-
-	return entropy
+		for j in range(genome_size):
+			for k in range(
 		
 
 def get_fitness(data, generations=100, individuals=100):
@@ -223,7 +213,7 @@ def run_sim():
 					p.selectAndCrossover()
 		
 				data.append(p)
-				gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
+				#gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
 
 if __name__ == "__main__":
 	run_sim()
