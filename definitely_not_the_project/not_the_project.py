@@ -5,11 +5,12 @@ import math
 import matplotlib.pyplot as plt
 import copy
 import random
-import pickle
+# import pickle
 
 
 class Individual:
-    def __init__(self, fit_var=0.1, fitness=0.0, mut_rate=0.0, fit_r=0.0, fit_delta=0.0, fit_theta=0.0, select_pres=1.0):
+    def __init__(self, fit_var=0.1, fitness=0.0, mut_rate=0.0, fit_r=0.0, fit_delta=0.0, fit_theta=0.0,
+                 select_pres=1.0):
         self.fitness = fitness
         self.normal_fitness = 0.0
         self.mut_rate = mut_rate
@@ -37,12 +38,12 @@ class Individual:
         for i in range(len(self.x_genome)):
             rand = np.random.random()
             if rand < self.mut_rate:
-                self.x_genome[i] = np.random.choice([0,1])
+                self.x_genome[i] = np.random.choice([0, 1])
 
         for i in range(len(self.y_genome)):
             rand = np.random.random()
             if rand < self.mut_rate:
-                self.y_genome[i] = np.random.choice([0,1])
+                self.y_genome[i] = np.random.choice([0, 1])
 
     def one_point_crossover(self, other):
         temp = copy.deepcopy(other)
@@ -87,7 +88,8 @@ class Population:
         self.fitness_x = []
 
         for i in range(size):
-            temp = Individual(mut_rate=mut_rate, fit_r=fit_r, fit_delta=fit_delta, fit_var=fit_var)
+            temp = Individual(mut_rate=mut_rate, fit_r=fit_r, fit_delta=fit_delta, fit_var=fit_var,
+                              select_pres=select_pres)
             self.population.append(copy.deepcopy(temp))
 
     def mutate_population(self):
@@ -169,10 +171,10 @@ def get_loci_entropy(data, generations=1000, individuals=1000, genome_size=20):
                 x_ones_count += data[i].population[j].x_genome[k]    
                 y_ones_count += data[i].population[j].y_genome[k]
 
-            if 0 < x_ones_count and x_ones_count < individuals:
+            if 0 < x_ones_count < individuals:
                 p = x_ones_count / individuals
                 x_entropy_sum += -p*math.log(p, 2) - (1-p)*math.log(1-p, 2)
-            if 0 < y_ones_count and y_ones_count < individuals:
+            if 0 < y_ones_count < individuals:
                 p = y_ones_count / individuals
                 y_entropy_sum += -p*math.log(p, 2) - (1-p)*math.log(1-p, 2)
 
@@ -182,7 +184,7 @@ def get_loci_entropy(data, generations=1000, individuals=1000, genome_size=20):
     return x_entropy, y_entropy
 
 
-def get_genome_entropy(data, generations=1000, individuals=1000, genome_size=20):
+def get_genome_entropy(data, generations=1000, individuals=1000):
     x_entropy = []
     y_entropy = []
     x_e_sum = 0.0
@@ -200,7 +202,6 @@ def get_genome_entropy(data, generations=1000, individuals=1000, genome_size=20)
 
         for k in pop_x_entropy:
             x_e_sum = 0.0
-			
             x_p = pop_x_entropy.get(k, 0.0) / individuals
          
             if x_p > 0:
@@ -208,7 +209,6 @@ def get_genome_entropy(data, generations=1000, individuals=1000, genome_size=20)
          
         for k in pop_y_entropy:
             y_e_sum = 0.0
-            
             y_p = pop_y_entropy.get(k, 0.0) / individuals
             
             if y_p > 0:
@@ -220,7 +220,7 @@ def get_genome_entropy(data, generations=1000, individuals=1000, genome_size=20)
     return x_entropy, y_entropy
 
 
-def get_location_entropy(data, generations=1000, individuals=1000, genome_size=20):
+def get_location_entropy(data, generations=1000, individuals=1000):
     x_entropy = []
     y_entropy = []
     x_e_sum = 0.0
@@ -239,7 +239,7 @@ def get_location_entropy(data, generations=1000, individuals=1000, genome_size=2
         for k in pop_x_entropy:
             x_e_sum = 0.0
 
-            x_p = pop_x_entropy.get(j, 0.0) / individuals
+            x_p = pop_x_entropy.get(k, 0.0) / individuals
 
             if x_p > 0:
                 x_e_sum += -x_p*math.log(x_p, 2)
@@ -247,7 +247,7 @@ def get_location_entropy(data, generations=1000, individuals=1000, genome_size=2
         for k in pop_y_entropy:
             y_e_sum = 0.0
             
-            y_p = pop_y_entropy.get(j, 0.0) / individuals
+            y_p = pop_y_entropy.get(k, 0.0) / individuals
             
             if y_p > 0:
                 y_e_sum += -y_p*math.log(y_p, 2)
@@ -258,7 +258,7 @@ def get_location_entropy(data, generations=1000, individuals=1000, genome_size=2
     return x_entropy, y_entropy
 
 
-def plot_fitness(filename, data, generations=1000, individuals=1000):
+def plot_fitness(filename, data, generations=1000):
     x = data[generations - 1].fitness_x
     y = data[generations - 1].fitness_y
 
@@ -314,7 +314,7 @@ def gen_graphs(filename, data):
 
 def run_sim():
     m_rates = [0.0, 0.01, 0.1, 1.0]
-    fit_deltas = [0.0, 0.0017,0.017, 0.17]
+    fit_deltas = [0.0, 0.0017, 0.017, 0.17]
     select_pres = [0.9, 1.0, 1.1, 2.0]
     sigma = [1.0, 0.25, 0.1]
     r = 0.0
@@ -327,7 +327,7 @@ def run_sim():
                     if d > 0.0:
                         r = 0.25
                     p = Population(size=500, mut_rate=m, select_pres=l, fit_delta=d, fit_r=r, fit_var=s)
-                    print("Starting " +  str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s))
+                    print("Starting " + str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s))
                     for i in range(1000):
                         data.append(copy.deepcopy(p))
     
@@ -336,9 +336,10 @@ def run_sim():
                         p.select_and_crossover()
 
                     data.append(p)
-                    with open("./data/" + str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s) + ".pkl", 'w') as output:
-                        pickle.dump(data, output, pickle.HIGHEST_PROTOCOL)
-#                gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
+                    # with open("./data/" + str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s) + ".pkl",
+                    # 'w') as output:
+                    #     pickle.dump(data, output, pickle.HIGHEST_PROTOCOL)
+                    gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
 
 
 if __name__ == "__main__":
