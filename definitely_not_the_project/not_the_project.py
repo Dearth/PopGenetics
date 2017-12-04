@@ -5,6 +5,7 @@ import math
 import matplotlib.pyplot as plt
 import copy
 import random
+import pickle
 
 
 class Individual:
@@ -79,14 +80,14 @@ class Individual:
 
 
 class Population:
-    def __init__(self, size=100, mut_rate=0.0, co_rate=0.1, fit_r=0.0, fit_delta=0.0, select_pres=1.0):
+    def __init__(self, size=100, fit_var=0.1, mut_rate=0.0, co_rate=0.1, fit_r=0.0, fit_delta=0.0, select_pres=1.0):
         self.co_rate = co_rate
         self.population = []
         self.fitness_y = []
         self.fitness_x = []
 
         for i in range(size):
-            temp = Individual(mut_rate=mut_rate, fit_r=fit_r, fit_delta=fit_delta)
+            temp = Individual(mut_rate=mut_rate, fit_r=fit_r, fit_delta=fit_delta, fit_var=fit_var)
             self.population.append(copy.deepcopy(temp))
 
     def mutate_population(self):
@@ -142,7 +143,7 @@ class Population:
         self.population = copy.deepcopy(temp_pop)
 
 
-def get_fitness(data, generations=100, individuals=100):
+def get_fitness(data, generations=1000, individuals=1000):
     fit = np.zeros(generations)
 
     for i in range(generations):
@@ -154,7 +155,7 @@ def get_fitness(data, generations=100, individuals=100):
     return fit
 
 
-def get_loci_entropy(data, generations=100, individuals=100, genome_size=20):
+def get_loci_entropy(data, generations=1000, individuals=1000, genome_size=20):
     x_entropy = []
     y_entropy = []
 
@@ -181,7 +182,7 @@ def get_loci_entropy(data, generations=100, individuals=100, genome_size=20):
     return x_entropy, y_entropy
 
 
-def get_genome_entropy(data, generations=100, individuals=100, genome_size=20):
+def get_genome_entropy(data, generations=1000, individuals=1000, genome_size=20):
     x_entropy = []
     y_entropy = []
     x_e_sum = 0.0
@@ -213,13 +214,13 @@ def get_genome_entropy(data, generations=100, individuals=100, genome_size=20):
             if y_p > 0:
                 y_e_sum += -y_p*math.log(y_p, 2) 
 
-        x_entropy.append(x_e_sum / 20.0)
-        y_entropy.append(y_e_sum / 20.0)
+        x_entropy.append(x_e_sum)
+        y_entropy.append(y_e_sum)
 
     return x_entropy, y_entropy
 
 
-def get_location_entropy(data, generations=100, individuals=100, genome_size=20):
+def get_location_entropy(data, generations=1000, individuals=1000, genome_size=20):
     x_entropy = []
     y_entropy = []
     x_e_sum = 0.0
@@ -251,13 +252,13 @@ def get_location_entropy(data, generations=100, individuals=100, genome_size=20)
             if y_p > 0:
                 y_e_sum += -y_p*math.log(y_p, 2)
 
-        x_entropy.append(x_e_sum / 20.0)
-        y_entropy.append(y_e_sum / 20.0)
+        x_entropy.append(x_e_sum)
+        y_entropy.append(y_e_sum)
 
     return x_entropy, y_entropy
 
 
-def plot_fitness(filename, data, generations=100, individuals=100):
+def plot_fitness(filename, data, generations=1000, individuals=1000):
     x = data[generations - 1].fitness_x
     y = data[generations - 1].fitness_y
 
@@ -270,69 +271,74 @@ def plot_fitness(filename, data, generations=100, individuals=100):
 def gen_graphs(filename, data):
     print("Processing " + filename)
 
-    x = range(100)
+    x = range(1000)
     e_loci_x, e_loci_y = get_loci_entropy(data)
     e_loca_x, e_loca_y = get_location_entropy(data)
     e_geno_x, e_geno_y = get_genome_entropy(data)
     f = get_fitness(data)
 
-#    plot_fitness(filename, data)
-#
-#    plt.figure(1)
-#    plt.plot(x, e_loci_x, x, e_loci_y)
-#    plt.title('Genetic Loci Entropy over time')
-#    plt.xlabel("Generation")
-#    plt.ylabel("Binary Entropy")
-#    plt.savefig("./graphs/" + filename + "_loci_entropy.png")
-#    plt.clf()
-#
-#    plt.figure(1)
-#    plt.plot(x, e_loca_x, x, e_loca_y)
-#    plt.title('Location Entropy over time')
-#    plt.xlabel("Generation")
-#    plt.ylabel("Binary Entropy")
-#    plt.savefig("./graphs/" + filename + "_location_entropy.png")
-#    plt.clf()
-# 
-#    plt.figure(1)
-#    plt.plot(x, e_geno_x, x, e_geno_y)
-#    plt.title('Genome Entropy over time')
-#    plt.xlabel("Generation")
-#    plt.ylabel("Binary Entropy")
-#    plt.savefig("./graphs/" + filename + "_genom_entropy.png")
-#    plt.clf()
-#
-#    plt.figure(1)
-#    plt.plot(x, f)
-#    plt.title('Population Fitness over time')
-#    plt.xlabel("Generation")
-#    plt.ylabel("Average Fitness")
-#    plt.savefig("./graphs/" + filename + "_fitness.png")
-#    plt.clf()
+    plot_fitness(filename, data)
+
+    plt.figure(1)
+    plt.plot(x, e_loci_x, x, e_loci_y)
+    plt.title('Genetic Loci Entropy over time')
+    plt.xlabel("Generation")
+    plt.ylabel("Binary Entropy")
+    plt.savefig("./graphs/" + filename + "_loci_entropy.png")
+    plt.clf()
+
+    plt.figure(1)
+    plt.plot(x, e_loca_x, x, e_loca_y)
+    plt.title('Location Entropy over time')
+    plt.xlabel("Generation")
+    plt.ylabel("Binary Entropy")
+    plt.savefig("./graphs/" + filename + "_location_entropy.png")
+    plt.clf()
+ 
+    plt.figure(1)
+    plt.plot(x, e_geno_x, x, e_geno_y)
+    plt.title('Genome Entropy over time')
+    plt.xlabel("Generation")
+    plt.ylabel("Binary Entropy")
+    plt.savefig("./graphs/" + filename + "_genom_entropy.png")
+    plt.clf()
+
+    plt.figure(1)
+    plt.plot(x, f)
+    plt.title('Population Fitness over time')
+    plt.xlabel("Generation")
+    plt.ylabel("Average Fitness")
+    plt.savefig("./graphs/" + filename + "_fitness.png")
+    plt.clf()
 
 
 def run_sim():
-    m_rates = [0.0, 0.01, 0.1]
-    fit_deltas = [0.0, 0.017, 0.17]
-    select_pres = [0.9, 1.0, 1.1]
+    m_rates = [0.0, 0.01, 0.1, 1.0]
+    fit_deltas = [0.0, 0.0017,0.017, 0.17]
+    select_pres = [0.9, 1.0, 1.1, 2.0]
+    sigma = [1.0, 0.25, 0.1]
     r = 0.0
 
     for m in m_rates:
         for d in fit_deltas:
-            for s in select_pres:
-                data = []
-                if d > 0.0:
-                    r = 0.25
-                p = Population(mut_rate=m, select_pres=s, fit_delta=d, fit_r=r)
-                for i in range(100):
-                    data.append(copy.deepcopy(p))
+            for l in select_pres:
+                for s in sigma:
+                    data = []
+                    if d > 0.0:
+                        r = 0.25
+                    p = Population(size=500, mut_rate=m, select_pres=l, fit_delta=d, fit_r=r, fit_var=s)
+                    print("Starting " +  str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s))
+                    for i in range(1000):
+                        data.append(copy.deepcopy(p))
+    
+                        p.mutate_population()
+                        p.evaluate_fitness()
+                        p.select_and_crossover()
 
-                    p.mutate_population()
-                    p.evaluate_fitness()
-                    p.select_and_crossover()
-
-                data.append(p)
-                gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
+                    data.append(p)
+                    with open("./data/" + str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s) + ".pkl", 'w') as output:
+                        pickle.dump(data, output, pickle.HIGHEST_PROTOCOL)
+#                gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
 
 
 if __name__ == "__main__":
