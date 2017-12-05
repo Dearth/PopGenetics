@@ -268,16 +268,16 @@ def plot_fitness(filename, data, generations=1000):
     plt.clf()
 
 
-def gen_graphs(filename, data):
+def gen_graphs(filename, data, size, generations):
     print("Processing " + filename)
 
-    x = range(1000)
-    e_loci_x, e_loci_y = get_loci_entropy(data)
-    e_loca_x, e_loca_y = get_location_entropy(data)
-    e_geno_x, e_geno_y = get_genome_entropy(data)
-    f = get_fitness(data)
+    x = range(generations)
+    e_loci_x, e_loci_y = get_loci_entropy(data, individuals=size, generations=generations)
+    e_loca_x, e_loca_y = get_location_entropy(data, individuals=size, generations=generations)
+    e_geno_x, e_geno_y = get_genome_entropy(data, individuals=size, generations=generations)
+    f = get_fitness(data, individuals=size, generations=generations)
 
-    plot_fitness(filename, data)
+    plot_fitness(filename, data, generations=generations)
 
     plt.figure(1)
     plt.plot(x, e_loci_x, x, e_loci_y)
@@ -317,18 +317,21 @@ def run_sim():
     fit_deltas = [0.0, 0.0017, 0.017, 0.17]
     select_pres = [0.9, 1.0, 1.1, 2.0]
     sigma = [1.0, 0.25, 0.1]
-    r = 0.0
+    r = 0.25
+    size = 1000
+    generations = 100
 
     for m in m_rates:
         for d in fit_deltas:
             for l in select_pres:
                 for s in sigma:
                     data = []
-                    if d > 0.0:
-                        r = 0.25
-                    p = Population(size=500, mut_rate=m, select_pres=l, fit_delta=d, fit_r=r, fit_var=s)
+                    # if d > 0.0:
+                    #     r = 0.25
+                    p = Population(size=size, mut_rate=m, select_pres=l, fit_delta=d, fit_r=r, fit_var=s)
+                    p.evaluate_fitness()
                     print("Starting " + str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s))
-                    for i in range(1000):
+                    for i in range(generations):
                         data.append(copy.deepcopy(p))
     
                         p.mutate_population()
@@ -339,7 +342,8 @@ def run_sim():
                     # with open("./data/" + str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s) + ".pkl",
                     # 'w') as output:
                     #     pickle.dump(data, output, pickle.HIGHEST_PROTOCOL)
-                    gen_graphs(str(d) + "_0.1_" + str(s) + "_" + str(m), data)
+                    gen_graphs(str(d) + "_0.1_" + str(l) + "_" + str(m) + "_" + str(s), data, size=size,
+                               generations=generations)
 
 
 if __name__ == "__main__":
