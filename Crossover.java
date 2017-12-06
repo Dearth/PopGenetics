@@ -70,7 +70,7 @@ public class Crossover extends ViewableAtomic {
 				values[i] /= sum_of_vals;
 			}
 			
-			double total_of_values = 0;
+			double total_of_values = 0.0;
 			for(double d : values)
 			{
 //				System.out.println("debug: value is " + String.valueOf(d));

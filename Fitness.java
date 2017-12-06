@@ -36,7 +36,7 @@ public class Fitness extends ViewableAtomic {
 		y_part = Math.pow((y - r*Math.sin(theta) - 0.5), 2) / (2*Math.pow(var, 2));
 		pow = (-1.0) * (x_part + y_part);
 		ret = Math.pow(Math.E, pow);
-		ret = Math.pow(ret, pop.selection_strength)
+		ret = Math.pow(ret, pop.selection_strength);
 		return ret;
 	}
 	

@@ -17,7 +17,7 @@ public class Generator extends ViewableAtomic {
 	protected double variance;
 
 	public Generator() { // default constructor
-		this("Generator", 0, 0.1, 1, 0.0, "default");
+		this("Generator", 0, 0.1, 1, 0.0, "default", 0.1);
 	}
 
 	public Generator(String name, double delta_theta, double p_crossover, double selective_pressure, double p_mutate, String filename_to_save, double variance) {
@@ -80,7 +80,7 @@ public class Generator extends ViewableAtomic {
 		else if (count == 3)
 			con = makeContent("p_mutate", new entity(String.valueOf(p_mutate)));
 		else if (count == 4)
-			con = makeContent("variance", new entity(variance));
+			con = makeContent("variance", new entity(String.valueOf(variance)));
 		else if (count == 5)
 			con = makeContent("filename", new entity(filename_to_save));
 		else // if (count == 5)
