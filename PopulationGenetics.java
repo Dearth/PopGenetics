@@ -29,6 +29,7 @@ public class PopulationGenetics extends ViewableDigraph {
 
 		addCoupling(Generator, "out_population", Fitness, "in_population");
 		addCoupling(Generator, "delta_theta", Fitness, "delta_theta");
+		addCoupling(Generator, "variance", Fitness, "variance");
 		addCoupling(Generator, "p_crossover", Crossover, "p_crossover");
 		addCoupling(Generator, "selective_pressure", Crossover, "selective_pressure");
 		addCoupling(Generator, "p_mutate", Mutator, "p_mutate");

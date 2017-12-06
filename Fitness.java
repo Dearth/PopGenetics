@@ -9,6 +9,7 @@ public class Fitness extends ViewableAtomic {
 	double theta = 0;
 	double delta_theta = 0;
 	double radius = 0.5;
+	double variance = 0.1;
 	Population pop;
 	
 	public Fitness() {
@@ -18,6 +19,7 @@ public class Fitness extends ViewableAtomic {
 	public Fitness(String name) {
 		super(name);
 		addInport("in_population");
+		addInport("variance");
 		addInport("delta_theta");
 		addInport("stop");
 		addOutport("out_population");
@@ -28,12 +30,13 @@ public class Fitness extends ViewableAtomic {
 		super.initialize();
 	}
 	
-	public double fitness(double x, double y, double r, double theta) {
+	public double fitness(double x, double y, double r, double theta, double var) {
 		double ret, x_part, y_part, pow;
-		x_part = Math.pow((x - r*Math.cos(theta) - 0.5), 2) / 2;
-		y_part = Math.pow((y - r*Math.sin(theta) - 0.5), 2) / 2;
+		x_part = Math.pow((x - r*Math.cos(theta) - 0.5), 2) / (2*Math.pow(var, 2));
+		y_part = Math.pow((y - r*Math.sin(theta) - 0.5), 2) / (2*Math.pow(var, 2));
 		pow = (-1.0) * (x_part + y_part);
 		ret = Math.pow(Math.E, pow);
+		ret = Math.pow(ret, pop.selection_strength)
 		return ret;
 	}
 	
@@ -42,7 +45,7 @@ public class Fitness extends ViewableAtomic {
 		for (Individual i : pop.population) {
 			x = i.get_x_coord();
 			y = i.get_y_coord();
-			i.setFitness(fitness(x, y, radius, theta));
+			i.setFitness(fitness(x, y, radius, theta, variance));
 		}
 		
 		theta += delta_theta; // rotate fitness function in advance of next call
